@@ -1,0 +1,20 @@
+<h2>User info</h2>
+<%= attachment_image_tag user, :profile_image, fallback: "no_image.jpg", size: "100x100" %>
+<table class="table">
+  <tbody>
+    <tr></tr>
+    <tr>
+      <th>name</th>
+      <th><%= user.name %></th>
+    </tr>
+    <tr>
+      <th>introduction</th>
+      <th><%= user.introduction %></th>
+    </tr>
+  </tbody>
+</table>
+<div class="row">
+  <a class="btn btn-outline-secondary btn-block user-edit-btn" href="/users/<%= user.id %>/edit">
+    <i class="fas fa-user-cog"></i>
+  </a>
+</div>

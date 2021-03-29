@@ -1,2 +1,102 @@
-<h1>Books#show</h1>
-<p>Find me in app/views/books/show.html.erb</p>
+<% if flash[:count] %>
+  <div class="container margin-top">
+    <div class="row">
+      <div class="col-sm-12 col-md-8 col-lg-5 px-5 px-sm-0 mx-auto">
+        <h1>Editing Book</h1>
+          <div class="error_explanation">
+            <h3><%= flash[:count] %>  error prohibited this obj from being saved:</h3>
+            <ul>
+              <% flash[:messages].each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <%= form_with model: @book, url: "/books/#{@book.id}", local: true do |f| %>
+        <div class="form-group">
+          <label for="book_title">Title</label>
+          <%= f.text_field :title, class: "form-control", value: "#{flash[:input_title]}" %>
+        </div>
+        <div class="form-group">
+          <label for="book_opinion">Opinion</label>
+          <%= f.text_area :body, class: "form-control", value: "#{flash[:input_body]}" %>
+        </div>
+        <div class="form-group">
+          <%= f.submit 'Update Book', class: "btn btn-success" %>
+        </div>
+        <% end %>
+        <%= link_to "Show", book_path(@book) %>
+        |
+        <%= link_to "Back", books_path %>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <% if flash[:notice] %>
+    <p class="notice"><%= flash[:notice] %></p>
+  <% end %>
+  <div class="container margin-top">
+    <div class="row">
+      <div class="col-md-3">
+        <h2>User info</h2>
+        <% @users.each do |user| %>
+          <% if user.id == @book.user_id %>
+            <%= attachment_image_tag user, :profile_image, fallback: "no_image.jpg", size: "100x100" %>
+            <table class="table">
+              <tbody>
+                <tr></tr>
+                <tr>
+                  <th>name</th>
+                  <th><%= user.name %></th>
+                </tr>
+                <tr>
+                  <th>introduction</th>
+                  <th><%= user.introduction %></th>
+                </tr>
+              </tbody>
+            </table>
+            <div class="row">
+              <a class="btn btn-outline-secondary btn-block user-edit-btn" href="/users/<%= user.id %>/edit">
+                <i class="fas fa-user-cog"></i>
+              </a>
+            </div>
+          <% end %>
+        <% end %>
+        <%= render 'layouts/new_book', book: @new_book %>
+      </div>
+      <div class="col-md-8 offset-md-1">
+        <h2>Book detail</h2>
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>
+                <% @users.each do |user| %>
+                  <% if @book.user_id == user.id %>
+                    <a href="/users/<%= user.id %>">
+                      <%= attachment_image_tag user, :profile_image, fallback: "no_image.jpg", size: "40x40" %>
+                      <br>
+                      <%= user.name %>
+                    </a>
+                  <% end %>
+                <% end %>
+              </td>
+              <td>
+                <%= link_to "#{@book.title}", book_path(@book) %>
+              </td>
+              <td>
+                <%= @book.body %>
+              </td>
+              <% if @user.id == @book.user_id %>
+                <td>
+                  <%= link_to "Edit", edit_book_path(@book), class: "btn btn-sm btn-success" %>
+                </td>
+                <td>
+                  <%= link_to "Destroy", book_path(@book), method: :delete, data: { confirm: "本当に消しますか？" }, class: "btn btn-sm btn-danger" %>
+                </td>
+              <% end %>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% end %>

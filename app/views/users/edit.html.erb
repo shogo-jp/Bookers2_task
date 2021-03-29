@@ -1,0 +1,34 @@
+<div class="container margin-top">
+  <div class="row">
+    <div class="col-sm-12 col-md-8 col-lg-5 px-5 px-sm-0 mx-auto">
+      <h2>User info</h2>
+      <% if flash[:count] %>
+        <div class="error_explanation">
+          <h3><%= flash[:count] %>  error prohibited this obj from being saved:</h3>
+          <ul>
+            <% flash[:messages].each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <%= form_with model: @user, url: "/users/#{@user.id}", local: true do |f| %>
+      <div class="form-group">
+        <label for="user_name">Name</label>
+        <%= f.text_field :name, class: "form-control" %>
+      </div>
+      <div class="form_-group user-image">
+        <label for="user_image">Image</label>
+        <%= f.attachment_field :profile_image, class: "form-control-file" %>
+      </div>
+      <div class="form-group">
+        <label for="user_introduction">Introduction</label>
+        <%= f.text_area :introduction, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.submit 'Update User', class: "btn btn-secondary" %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
