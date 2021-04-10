@@ -1,4 +1,7 @@
 class BooksController < ApplicationController
+  before_action :authenticate_user!
+
+
   def create
     @book = Book.new(book_params)
     @book.user_id = current_user.id
@@ -21,12 +24,13 @@ class BooksController < ApplicationController
     @user = User.find(current_user.id)
     @new_book = Book.new
     @book = Book.find(params[:id])
+    @book_comment = BookComment.new
   end
 
   def edit
-    @book = Book.find(params[:id])
+     @book = Book.find(params[:id])
     if @book.user_id != current_user.id
-      redirect_back(fallback_location: books_path)
+      redirect_to books_path
     end
   end
 
@@ -53,6 +57,6 @@ class BooksController < ApplicationController
   private
 
   def book_params
-    params.require(:book).permit(:title, :body)
+    params.require(:book).permit(:title, :body, :user_id)
   end
 end
